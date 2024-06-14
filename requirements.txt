@@ -1,0 +1,7 @@
+sqlalchemy
+pyodbc
+pandas
+azure-keyvault-secrets
+azure-identity
+msal
+adal
