@@ -147,7 +147,3 @@ if __name__ =="__main__":
         df_Table.to_sql('Commentary_TextBoxes', conn, schema='staging', if_exists='replace', index=False)
 
     execute_stored_proc("EXEC scd.UpdateCommentary")
-    query="""update scd.RefreshTimes
-set UpdateDTTM = getdate()
-where Feed = 'Data'"""
-    execute_stored_proc(query)
