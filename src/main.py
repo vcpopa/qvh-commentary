@@ -69,7 +69,7 @@ if __name__ =="__main__":
     WHERE rowid = 1
     )
     select * from cohort
-    where eomonth(period)  = eomonth(dateadd(month, -2, getdate()))
+    where eomonth(period)  >= eomonth(dateadd(month, -2, getdate()))
 
 
     ;
@@ -140,7 +140,7 @@ if __name__ =="__main__":
     where RowID = 1
         )
         SELECT * from cohort
-        where eomonth(coalesce(period, CommentaryMonth))  = eomonth(dateadd(month, -2, getdate()))
+        where eomonth(coalesce(period, CommentaryMonth))  >= eomonth(dateadd(month, -2, getdate()))
     """
     df_Table = read_sql(query, db_name='public-dataflow-connectionstring')
     with connection(db_name='public-dataflow-connectionstring') as conn:
