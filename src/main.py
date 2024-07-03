@@ -40,20 +40,13 @@ if __name__ =="__main__":
 
     with cohort as (
     SELECT
-        LEFT(AppTitle, 4) AS Area_ID,
+        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) end  AS Area_ID,
         AppTitle AS CommentarySection,
         AppTable AS CommentaryBox,
-        CASE
-            WHEN referencevalue IS NOT NULL AND CHARINDEX('|', referencevalue) > 0
-            THEN TRIM(RIGHT(referencevalue, LEN(referencevalue) - CHARINDEX('|', referencevalue)))
-            ELSE NULL
-        END AS Measure_Description,
-        CASE
-            WHEN referencevalue IS NOT NULL AND CHARINDEX('|', referencevalue) > 0
-            THEN CAST(LTRIM(RTRIM(SUBSTRING(referencevalue, 1, CHARINDEX('|', referencevalue) - 1))) AS DATE)
-            ELSE NULL
-        END AS Period,
-        referenceValue,
+        Measure_Description, 
+        ReferenceValue, 
+        CommentaryLevel, 
+        Period, 
         TableRow AS OrderNo,
         case when ColumnTitle = 'Risk / Issues' then 'Risks / Issues' else ColumnTitle end as ColumnTitle ,
         ColumnValue,
@@ -63,13 +56,11 @@ if __name__ =="__main__":
             else null end as AnnualGoal
 
     FROM
-        --[dosapp].[Apps_Input_TableProComponent_Current]
-        --[staging].[Apps_Input_TableProComponent_Current]
-        [staging].[Apps_Input_TableProComponent]
+         [staging].[Apps_Input_TableProComponent]
     WHERE rowid = 1
     )
     select * from cohort
-    where eomonth(period)  >= eomonth(dateadd(month, -2, getdate()))
+    where eomonth(period)  >= eomonth(dateadd(month, -1, getdate()))
 
 
     ;
@@ -112,30 +103,22 @@ if __name__ =="__main__":
 
     with cohort as (
         SELECT
-        LEFT(AppTitle, 4) AS Area_ID,
+        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) end  AS Area_ID,
         AppTitle AS CommentarySection,
         AppTextBox AS CommentaryBox,
-        CASE
-            WHEN referencevalue IS NOT NULL AND CHARINDEX('|', referencevalue) > 0
-            THEN TRIM(RIGHT(referencevalue, LEN(referencevalue) - CHARINDEX('|', referencevalue)))
-            ELSE NULL
-        END AS Measure_Description,
-        CASE
-            WHEN referencevalue IS NOT NULL AND CHARINDEX('|', referencevalue) > 0
-            THEN TRY_CAST(LTRIM(RTRIM(SUBSTRING(referencevalue, 1, CHARINDEX('|', referencevalue) - 1))) AS DATE)
-            ELSE CAST(NULL AS DATETIME)
-        END AS Period,
-        referenceValue,
+        Measure_Description, 
+        ReferenceValue, 
+        CommentaryLevel, 
+        Period, 
         App_Text as Text ,
         LastSaved,
         LTRIM(substring(Apptitle, 5, len(Apptitle ))) CommentaryType,
         case when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Annual Goal%' then 'Annual Goal'
             when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Non-Annual Goal' then 'NonAnnual Goal'
             else null end as AnnualGoal ,
-    DATEADD(month, DATEDIFF(month, 0, CAST(LastSaved AS DATE)) - 1, 0) as CommentaryMonth
+        DATEADD(month, DATEDIFF(month, 0, CAST(LastSaved AS DATE)) - 1, 0) as CommentaryMonth
     FROM
-        --[dosapp].[Apps_Input_TextBoxComponent_Current]
-        --[staging].[Apps_Input_TextBoxComponent_Current]
+        
         [staging].[Apps_Input_TextBoxComponent]
     where RowID = 1
         )
