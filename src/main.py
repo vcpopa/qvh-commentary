@@ -53,7 +53,8 @@ if __name__ =="__main__":
         LastSaved,
         case when AppTitle like '%Non-Annual Goal%' then 'NonAnnual Goal'
             when AppTitle like 'K% Annual Goal%' then 'Annual Goal'
-            else null end as AnnualGoal
+            else null end as AnnualGoal,
+        Dashboard
 
     FROM
          [staging].[Apps_Input_TableProComponent]
@@ -72,7 +73,7 @@ if __name__ =="__main__":
         filtered_df = df_Table[df_Table['CommentaryBox'] == box]
         # Pivot the filtered DataFrame
         pivot_df = filtered_df.pivot_table(
-            index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved', 'CommentaryLevel'],
+            index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved', 'CommentaryLevel', 'Dashboard'],
             columns='ColumnTitle',
             values='ColumnValue',
             aggfunc='first'
@@ -87,7 +88,7 @@ if __name__ =="__main__":
             for goal in unique_annual_goals:
                 goal_filtered_df = filtered_df[filtered_df['AnnualGoal'] == goal]
                 goal_pivot_df = goal_filtered_df.pivot_table(
-                    index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved','CommentaryLevel'],
+                    index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved','CommentaryLevel', 'Dashboard'],
                     columns='ColumnTitle',
                     values='ColumnValue',
                     aggfunc='first'
@@ -116,7 +117,8 @@ if __name__ =="__main__":
         case when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Annual Goal%' then 'Annual Goal'
             when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Non-Annual Goal' then 'NonAnnual Goal'
             else null end as AnnualGoal ,
-        DATEADD(month, DATEDIFF(month, 0, CAST(LastSaved AS DATE)) - 1, 0) as CommentaryMonth
+        DATEADD(month, DATEDIFF(month, 0, CAST(LastSaved AS DATE)) - 1, 0) as CommentaryMonth,
+        Dashboard 
     FROM
         
         [staging].[Apps_Input_TextBoxComponent]
