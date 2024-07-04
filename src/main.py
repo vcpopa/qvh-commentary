@@ -40,7 +40,7 @@ if __name__ =="__main__":
 
     with cohort as (
     SELECT
-        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) end  AS Area_ID,
+        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) else 'DEV' end  AS Area_ID,
         AppTitle AS CommentarySection,
         AppTable AS CommentaryBox,
         Measure_Description, 
@@ -52,7 +52,7 @@ if __name__ =="__main__":
         ColumnValue,
         LastSaved,
         case when AppTitle like '%Non-Annual Goal%' then 'NonAnnual Goal'
-            when AppTitle like 'K% Annual Goal%' then 'Annual Goal'
+            when AppTitle like '% Annual Goal%' then 'Annual Goal'
             else null end as AnnualGoal,
         Dashboard
 
@@ -104,7 +104,7 @@ if __name__ =="__main__":
 
     with cohort as (
         SELECT
-        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) end  AS Area_ID,
+        case when AppTitle like 'KSO%' then LEFT(AppTitle, 4) else 'DEV'  end  AS Area_ID,
         AppTitle AS CommentarySection,
         AppTextBox AS CommentaryBox,
         Measure_Description, 
@@ -114,9 +114,12 @@ if __name__ =="__main__":
         App_Text as Text ,
         LastSaved,
         LTRIM(substring(Apptitle, 5, len(Apptitle ))) CommentaryType,
-        case when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Annual Goal%' then 'Annual Goal'
-            when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Non-Annual Goal' then 'NonAnnual Goal'
-            else null end as AnnualGoal ,
+        --case when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Annual Goal%' then 'Annual Goal'
+          --  when LTRIM(substring(Apptitle, 5, len(Apptitle ))) like 'Non-Annual Goal' then 'NonAnnual Goal'
+--            else null end as AnnualGoal ,
+        case when AppTitle like '%Non-Annual Goal%' then 'NonAnnual Goal'
+            when AppTitle like '% Annual Goal%' then 'Annual Goal'
+            else null end as AnnualGoal,
         DATEADD(month, DATEDIFF(month, 0, CAST(LastSaved AS DATE)) - 1, 0) as CommentaryMonth,
         Dashboard 
     FROM
