@@ -60,7 +60,7 @@ if __name__ =="__main__":
     WHERE rowid = 1
     )
     select * from cohort
-    where eomonth(period)  >= eomonth(dateadd(month, -1, getdate()))
+    where eomonth(period)  >= eomonth(dateadd(month, -2, getdate()))
 
 
     ;
