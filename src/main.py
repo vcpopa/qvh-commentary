@@ -22,17 +22,26 @@ if __name__ =="__main__":
 
     SELECT * from  [dosapp].[Apps_Input_TextBoxComponent]
     """
+
+    
+    DropDownLists = """
+    SELECT * from [dosapp].[Apps_Input_DropdownList]
+    """
+    
+
+
     df_Table_Pro_Current = read_sql(Table_Pro_Current,db_name="public-dos-connectionstring")
     df_Table_Pro_History = read_sql(Table_Pro_History, db_name="public-dos-connectionstring")
     df_TextBox_Current = read_sql(TextBox_Current, db_name="public-dos-connectionstring")
     df_TextBox_History = read_sql(TextBox_History, db_name="public-dos-connectionstring")
-
+    df_DropDownLists = read_sql(DropDownLists, db_name="public-dos-connectionstring")
 
     with connection(db_name='public-dataflow-connectionstring') as conn:
         df_Table_Pro_Current.to_sql('Apps_Input_TableProComponent_Current', conn, schema='staging', if_exists='replace', index=False)
         df_Table_Pro_History.to_sql('Apps_Input_TableProComponent', conn, schema='staging', if_exists='replace', index=False)
         df_TextBox_Current.to_sql('Apps_Input_TextBoxComponent_Current', conn, schema='staging', if_exists='replace', index=False)
         df_TextBox_History.to_sql('Apps_Input_TextBoxComponent', conn, schema='staging', if_exists='replace', index=False)
+        df_DropDownLists.to_sql('Apps_Input_DropDownLists', conn, schema='staging', if_exists='replace', index=False)
 
 
 
@@ -133,5 +142,7 @@ if __name__ =="__main__":
     df_Table = read_sql(query, db_name='public-dataflow-connectionstring')
     with connection(db_name='public-dataflow-connectionstring') as conn:
         df_Table.to_sql('Commentary_TextBoxes', conn, schema='staging', if_exists='replace', index=False)
+
+
 
     execute_stored_proc("EXEC scd.UpdateCommentary")
