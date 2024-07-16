@@ -79,7 +79,7 @@ if __name__ =="__main__":
         filtered_df = df_Table[df_Table['CommentaryBox'] == box]
         # Pivot the filtered DataFrame
         pivot_df = filtered_df.pivot_table(
-            index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved', 'CommentaryLevel', 'Dashboard'],
+            index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved', 'CommentaryLevel', 'Dashboard','Key1'],
             columns='ColumnTitle',
             values='ColumnValue',
             aggfunc='first'
@@ -94,7 +94,7 @@ if __name__ =="__main__":
             for goal in unique_annual_goals:
                 goal_filtered_df = filtered_df[filtered_df['AnnualGoal'] == goal]
                 goal_pivot_df = goal_filtered_df.pivot_table(
-                    index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved','CommentaryLevel', 'Dashboard'],
+                    index=['Area_ID', 'CommentarySection', 'CommentaryBox', 'OrderNo', 'Measure_Description', 'Period', 'LastSaved','CommentaryLevel', 'Dashboard','Key1'],
                     columns='ColumnTitle',
                     values='ColumnValue',
                     aggfunc='first'
